@@ -14,7 +14,7 @@ namespace FLTC.Lab2
     public class SymbolTable : ISymbolTable
     {
         private readonly int size;
-        private readonly LinkedList<string>[] items;
+        public readonly LinkedList<string>[] items;
 
         public SymbolTable(int size = 64)
         {
@@ -34,6 +34,7 @@ namespace FLTC.Lab2
             var position = HashCode(key) % size;
             return Math.Abs(position);
         }
+
         private LinkedList<string> GetList(int position)
         {
             var linkedList = items[position];
@@ -89,6 +90,31 @@ namespace FLTC.Lab2
             list.AddLast(token);
 
             return (listPosition, list.Count - 1);
+        }
+
+        public override string ToString()
+        {
+            var builder = new StringBuilder();
+            builder.Append("Symbol table: {\n");
+
+            var listIndex = 0;
+            foreach(var list in items)
+            {
+                if (list == null)
+                    continue;
+
+                var entryIndex = 0;
+                foreach(var entry in list)
+                {
+                    builder.Append($"{listIndex}:{entryIndex} = {entry}; ");
+                    entryIndex += 1;
+                }
+                listIndex += 1;
+            }
+
+            builder.Append("}\n");
+
+            return builder.ToString();
         }
     }
 }

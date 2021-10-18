@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Linq;
 
 namespace FLTC.Lab2
 {
@@ -6,35 +8,24 @@ namespace FLTC.Lab2
     {
         static void Main(string[] args)
         {
-            var tokens = new[]
-            {
-                "thus",
-                "ab",
-                "is",
-                "numeric",
-                ".",
-                "ab",
-                "shall",
-                "be",
-                "read",
-                ".",
-                "thus",
-                "ba",
-                "is",
-                "numeric",
-                "."
-            };
+            var testString = "-1";
+
+            Console.WriteLine(new ConstantTokenType().constantRegex.IsMatch(testString));
 
             var tableSize = 128;
+           
+            var table = new SymbolTable(tableSize);
+            var pif = new ProgramInternalForm();
 
-            ISymbolTable table = new SymbolTable(tableSize);
+            var scanner = new Scanner(table, pif);
 
-            foreach(var token in tokens)
-            {
-                var pos = table.Insert(token);
+            using var program1 = new StreamReader("./program1.in");
 
-                Console.WriteLine($"({pos.Item1}, {pos.Item2})");
-            }
+            scanner.Scan(program1);
+
+            Console.WriteLine(table);
+
+            Console.WriteLine("PIF: {\n" + string.Join(" ; ", pif.Pairs.Select(p => $"{p.Item2} = {p.Item1}")) + "}\n");
         }
     }
 }
