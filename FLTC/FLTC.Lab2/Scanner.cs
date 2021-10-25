@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -23,7 +22,9 @@ namespace FLTC.Lab2
 
         public void Scan(StreamReader input)
         {
-            var reservedWord = new ReservedTokenType();
+            var reservedWord = new ReservedWordTokenType();
+            var delimiter = new DelimiterTokenType();
+            var separator = new SeparatorTokenType();
             var identifier = new IdentifierTokenType();
             var constant = new ConstantTokenType();
 
@@ -31,18 +32,35 @@ namespace FLTC.Lab2
             {
                 var token = Detect(input);
 
-                if (token.Is(reservedWord))
+                if (token.Is(separator))
                 {
-                    // genPIF(token, 0)
-                    pif.Add((token, 0));
+                    pif.Add((token, "NAN"));
                     continue;
                 }
 
-                if(token.Is(identifier) || token.Is(constant))
+                if (token.Is(delimiter))
+                {
+                    pif.Add((token, "DEL"));
+                    continue;
+                }
+
+                if (token.Is(reservedWord))
+                {
+                    pif.Add((token, "RES"));
+                    continue;
+                }
+
+                if (token.Is(identifier))
                 {
                     var index = symbolTable.Insert(token);
-                    // genPIF(token, index)
-                    pif.Add((token, index.Item1));
+                    pif.Add((token, "SYM"));
+                    continue;
+                }
+
+                if (token.Is(constant))
+                {
+                    var index = symbolTable.Insert(token);
+                    pif.Add((token, "SYM"));
                     continue;
                 }
 
@@ -52,12 +70,12 @@ namespace FLTC.Lab2
 
         private bool IsSeparator(char c)
         {
-            return ReservedTokenType.Separators.Contains(c);
+            return SeparatorTokenType.Separators.Contains(c);
         }
 
         private bool IsDelimiter(char c)
         {
-            return ReservedTokenType.Delimiters.Contains(c);
+            return DelimiterTokenType.Delimiters.Contains(c);
         }
 
         public string Detect(StreamReader input)

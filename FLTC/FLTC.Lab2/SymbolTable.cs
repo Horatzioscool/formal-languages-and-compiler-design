@@ -97,19 +97,19 @@ namespace FLTC.Lab2
             var builder = new StringBuilder();
             builder.Append("Symbol table: {\n");
 
-            var listIndex = 0;
+            var listIndex = -1;
             foreach(var list in items)
             {
+                listIndex += 1;
                 if (list == null)
                     continue;
 
                 var entryIndex = 0;
                 foreach(var entry in list)
                 {
-                    builder.Append($"{listIndex}:{entryIndex} = {entry}; ");
+                    builder.Append($"{listIndex}:{entryIndex} = {entry};\n");
                     entryIndex += 1;
                 }
-                listIndex += 1;
             }
 
             builder.Append("}\n");

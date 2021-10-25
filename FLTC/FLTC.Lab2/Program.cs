@@ -23,9 +23,8 @@ namespace FLTC.Lab2
 
             scanner.Scan(program1);
 
-            Console.WriteLine(table);
-
-            Console.WriteLine("PIF: {\n" + string.Join(" ; ", pif.Pairs.Select(p => $"{p.Item2} = {p.Item1}")) + "}\n");
+            File.WriteAllText("./symbol-table.log", table.ToString());
+            File.WriteAllText("./pif.log", "PIF: {\n" + string.Join(" ; ", pif.Pairs.Select(p => $"{p.Item2} = {p.Item1}")) + "}\n");
         }
     }
 }

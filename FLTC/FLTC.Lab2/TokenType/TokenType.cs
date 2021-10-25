@@ -9,7 +9,7 @@ namespace FLTC.Lab2
         bool Matches(string text);
     }
 
-    public class ReservedTokenType : TokenType
+    public class ReservedWordTokenType : TokenType
     {
         private static IEnumerable<string> WordsFrom(string text)
         {
@@ -25,16 +25,34 @@ namespace FLTC.Lab2
             .Concat(WordsFrom("added with, subtracted by, multiply with, divide by"))
             .Concat(WordsFrom("read, shall be written"))
             .Concat(WordsFrom("true, false"))
-            .Concat(WordsFrom("equals, greater than, lesser than, different to"));
+            .Concat(WordsFrom("equals, greater than, lesser than, different to"))
+            .Concat(new[] { "read", "written" })
+            ;
 
-        public static readonly IEnumerable<char> Delimiters = new[]
+        public bool Matches(string text)
         {
+            var lowerText = text.ToLowerInvariant();
+            return ReservedWords.Any(s => s == lowerText);
+        }
+    }
+
+    public class DelimiterTokenType : TokenType
+    {
+        public static readonly IEnumerable<char> Delimiters = new[]
+{
             '.',
             ':',
             ';',
             ','
         };
-
+        public bool Matches(string text)
+        {
+            var lowerText = text.ToLowerInvariant();
+            return lowerText.All(c => Delimiters.Contains(c));
+        }
+    }
+    public class SeparatorTokenType : TokenType
+    {
         public static readonly IEnumerable<char> Separators = new[]
         {
             ' ',
@@ -46,15 +64,13 @@ namespace FLTC.Lab2
         public bool Matches(string text)
         {
             var lowerText = text.ToLowerInvariant();
-            return ReservedWords.Any(s => s == lowerText)
-                || Delimiters.Any(o => new string(new [] { o }) == lowerText)
-                || Separators.Any(s => new Regex($"{s}+").IsMatch(text));
+            return lowerText.All(c => Separators.Contains(c));
         }
     }
 
     public class IdentifierTokenType : TokenType
     {
-        private readonly Regex identifierRegex = new Regex("[a-zA-Z]\\w*");
+        private readonly Regex identifierRegex = new Regex("^([a-zA-Z]\\w*)$");
         public bool Matches(string text)
         {
             return identifierRegex.IsMatch(text);
@@ -63,7 +79,7 @@ namespace FLTC.Lab2
 
     public class ConstantTokenType : TokenType
     {
-        public readonly Regex constantRegex = new Regex("((\\+|\\-)?[1-9][0-9]*|0)|(\"\\w*\")");
+        public readonly Regex constantRegex = new Regex("^(((\\+|\\-)?[1-9][0-9]*|0)|(\"\\w*\"))$");
         public bool Matches(string text)
         {
 
