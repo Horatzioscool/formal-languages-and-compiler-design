@@ -27,11 +27,12 @@ namespace FLTC.Lab2
             .Concat(WordsFrom("true, false"))
             .Concat(WordsFrom("equals, greater than, lesser than, different to"));
 
-        public static readonly IEnumerable<char> Operators = new[]
+        public static readonly IEnumerable<char> Delimiters = new[]
         {
             '.',
             ':',
-            ';'
+            ';',
+            ','
         };
 
         public static readonly IEnumerable<char> Separators = new[]
@@ -46,7 +47,7 @@ namespace FLTC.Lab2
         {
             var lowerText = text.ToLowerInvariant();
             return ReservedWords.Any(s => s == lowerText)
-                || Operators.Any(o => new string(new [] { o }) == lowerText)
+                || Delimiters.Any(o => new string(new [] { o }) == lowerText)
                 || Separators.Any(s => new Regex($"{s}+").IsMatch(text));
         }
     }
@@ -62,7 +63,7 @@ namespace FLTC.Lab2
 
     public class ConstantTokenType : TokenType
     {
-        public readonly Regex constantRegex = new Regex("((\\+|\\-)?[1-9][0-9]+|0)|(\"\\w*\")");
+        public readonly Regex constantRegex = new Regex("((\\+|\\-)?[1-9][0-9]*|0)|(\"\\w*\")");
         public bool Matches(string text)
         {
 

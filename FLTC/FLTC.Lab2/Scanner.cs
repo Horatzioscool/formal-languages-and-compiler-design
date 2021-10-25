@@ -55,9 +55,9 @@ namespace FLTC.Lab2
             return ReservedTokenType.Separators.Contains(c);
         }
 
-        private bool IsOperator(char c)
+        private bool IsDelimiter(char c)
         {
-            return ReservedTokenType.Operators.Contains(c);
+            return ReservedTokenType.Delimiters.Contains(c);
         }
 
         public string Detect(StreamReader input)
@@ -88,7 +88,7 @@ namespace FLTC.Lab2
                         return buffer;
                     }
                 }
-                else if (IsOperator(nextChar))
+                else if (IsDelimiter(nextChar))
                 {
                     if(buffer.Length == 0)
                     {
