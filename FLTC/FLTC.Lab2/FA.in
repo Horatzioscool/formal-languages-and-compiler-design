@@ -1,0 +1,14 @@
+﻿states:
+s0
+s1
+s2
+s3
+initial:
+s0
+final:
+s1
+s2
+transitions:
+s0-(a)->s2
+s0-(b)->s0
+s0-(b)->s2

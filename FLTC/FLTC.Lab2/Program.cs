@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FLTC.Lab2.FiniteAutomata;
+using System;
 using System.IO;
 using System.Linq;
 
@@ -8,6 +9,10 @@ namespace FLTC.Lab2
     {
         static void Main(string[] args)
         {
+            var menu = new FiniteAutomatonMenu();
+
+            menu.Start();
+
             var testString = "-1";
 
             Console.WriteLine(new ConstantTokenType().constantRegex.IsMatch(testString));
