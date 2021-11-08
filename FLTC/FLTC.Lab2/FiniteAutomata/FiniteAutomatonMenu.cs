@@ -14,7 +14,9 @@ namespace FLTC.Lab2.FiniteAutomata
                 "2. Show states",
                 "3. Show alphabet",
                 "4. Show transitions",
-                "5. Show final states"
+                "5. Show final states",
+                "6. Test automaton",
+                "7. Check is deterministic",
         });
         public void Start()
         {
@@ -22,7 +24,7 @@ namespace FLTC.Lab2.FiniteAutomata
 
             while (true)
             {
-                Console.WriteLine("Menu");
+                Console.WriteLine(Menu);
                 var input = Console.ReadLine();
                 input = Regex.Replace(input, "[^0-9]+", "");
 
@@ -53,6 +55,18 @@ namespace FLTC.Lab2.FiniteAutomata
                     case "5":
                         {
                             Console.WriteLine(string.Join(", ", Viewer.FinalStates));
+                            continue;
+                        }
+                    case "6":
+                        {
+                            Console.WriteLine("Input string:");
+                            var inputString = Console.ReadLine().Trim();
+                            Console.WriteLine(Selected.Test(inputString));
+                            continue;
+                        }
+                    case "7":
+                        {
+                            Console.WriteLine($"Automaton is deterministic: {Viewer.IsDeterministic}");
                             continue;
                         }
                     default:

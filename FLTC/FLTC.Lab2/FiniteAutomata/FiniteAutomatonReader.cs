@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace FLTC.Lab2.FiniteAutomata
@@ -9,7 +11,7 @@ namespace FLTC.Lab2.FiniteAutomata
         private Regex StatesRegex = new("(states:(\\r)?\\n(?'States'(\\w+(\\r)?\\n)+))");
         private Regex InitialStatesRegex = new("(initial:(\\r)?\\n(?'Initial'(\\w+(\\r)?\\n)+))");
         private Regex FinalStatesRegex = new("(final:(\\r)?\\n(?'Final'(\\w+(\\r)?\\n)+))");
-        private Regex Transitions = new("(transitions:(\\r)?\\n(?'Transitions'((\\w+)-\\((\\w+)\\)->(\\w+)((\\r)?\\n)?)+))");
+        private Regex Transitions = new("(transitions:(\\r)?\\n(?'Transitions'((\\w+)-\\((.+)\\)->(\\w+)((\\r)?\\n)?)+))");
 
         public FiniteAutomaton ReadFromFile(string path)
         {
@@ -40,6 +42,8 @@ namespace FLTC.Lab2.FiniteAutomata
 
             foreach(var state in initialStates)
             {
+                if (!states.Contains(state))
+                    throw new ApplicationException("Initial state not in states list!");
                 automata.AddInputState(state);
             }
 
@@ -48,18 +52,20 @@ namespace FLTC.Lab2.FiniteAutomata
             foreach (var state in finalStates)
             {
                 automata.AddFinalState(state);
+                if (!states.Contains(state))
+                    throw new ApplicationException("Final state not in states list!");
             }
 
             var transitions = match.Groups["Transitions"].Value.Split("\r\n", options: System.StringSplitOptions.RemoveEmptyEntries);
 
-            foreach (var transition in initialStates)
+            foreach (var transition in transitions)
             {
-                var transitionRegex = new Regex("(\\w+)-\\((\\w+)\\)->(\\w+)");
+                var transitionRegex = new Regex("(\\w+)-\\((.+)\\)->(\\w+)");
                 var tmatch = transitionRegex.Match(transition);
 
-                var source = tmatch.Groups[0].Value;
-                var label = tmatch.Groups[1].Value;
-                var dest = tmatch.Groups[2].Value;
+                var source = tmatch.Groups[1].Value;
+                var label = tmatch.Groups[2].Value;
+                var dest = tmatch.Groups[3].Value;
 
                 automata.AddTransition(source, dest, label);
             }

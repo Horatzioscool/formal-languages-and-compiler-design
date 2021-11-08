@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using FLTC.Lab2.FiniteAutomata;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -70,20 +71,23 @@ namespace FLTC.Lab2
 
     public class IdentifierTokenType : TokenType
     {
+        private static FiniteAutomaton automaton = new FiniteAutomatonReader().ReadFromFile("./TokenType/Identifier.fa");
         private readonly Regex identifierRegex = new Regex("^([a-zA-Z]\\w*)$");
         public bool Matches(string text)
         {
-            return identifierRegex.IsMatch(text);
+            //return identifierRegex.IsMatch(text);
+            return automaton.Test(text);
         }
     }
 
     public class ConstantTokenType : TokenType
     {
+        private static FiniteAutomaton automaton = new FiniteAutomatonReader().ReadFromFile("./TokenType/Constant.fa");
         public readonly Regex constantRegex = new Regex("^(((\\+|\\-)?[1-9][0-9]*|0)|(\"\\w*\"))$");
         public bool Matches(string text)
         {
-
-            return constantRegex.IsMatch(text);
+            // return constantRegex.IsMatch(text);
+            return automaton.Test(text);
         }
     }
 }

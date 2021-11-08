@@ -9,13 +9,13 @@ namespace FLTC.Lab2
     {
         static void Main(string[] args)
         {
-            var menu = new FiniteAutomatonMenu();
+            //var menu = new FiniteAutomatonMenu();
 
-            menu.Start();
+            //menu.Start();
 
-            var testString = "-1";
+            //var testString = "-1";
 
-            Console.WriteLine(new ConstantTokenType().constantRegex.IsMatch(testString));
+            //Console.WriteLine(new ConstantTokenType().constantRegex.IsMatch(testString));
 
             var tableSize = 128;
            

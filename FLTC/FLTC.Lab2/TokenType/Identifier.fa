@@ -1,12 +1,10 @@
 ﻿states:
 s0
-s2
+s1
 initial:
 s0
 final:
-s0
-s2
+s1
 transitions:
-s0-(a)->s2
-s0-(b)->s0
-s0-(b)->s2
+s0-([a-zA-Z])->s1
+s1-(\w)->s1
