@@ -1,0 +1,6 @@
+[START]program ::= assignment|NIL
+assignment ::= [IDENT],"=",[CONST],"."
+// assignment - nonterminal
+// identifier - terminal
+// constant - terminal
+// "=" - terminal

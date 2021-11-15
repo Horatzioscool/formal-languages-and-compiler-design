@@ -1,0 +1,10 @@
+(Program to show all the numbers smaller than a given number n)
+
+Thus n is numeric.
+n shall be read.
+
+Thus i is numeric, known as: 0.
+
+While i is lesser than n,
+i shall be written,
+i shall be i added by 1.

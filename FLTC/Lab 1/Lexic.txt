@@ -1,0 +1,36 @@
+Alphabet:
+a. Upper (A-Z) and lower case letters (a-z) of the English alphabet
+b. Decimal digits (0-9)
+c. Special characters (, . ; \s ( ))
+
+Lexic
+
+a. Special symbols
+    - separators \s, \t, \n, \r
+    - delimiters , . ; :
+    - reserved words:
+        thus, is, known, as, shall, be, when, then, while, not
+        numeric, text, complex
+        added, with, subtracted, by, divide,
+        read, written,
+        true, false,
+        equals, greater, than, different, to
+
+b. Identifiers
+
+    identifier ::= letter{letter|digit}
+    letter ::= uppercaseLetter | lowercaseLetter
+    uppercaseLetter ::= "A" | "B" | ... | "Z"
+    lowercaseLetter ::= "a" | "b" | ... | "z"
+    digit ::= "0" | "1" | "2" | ... | "9"
+
+c. Constants
+    1. Numeric Constants
+        intconst ::= ["+"|"-"] non_zero_digit{digit}|"0"
+        non_zero_digit ::= "1"|"2"|...|"9"
+    3. String
+        stringconst ::= "\"" {char} "\""
+        char ::= letter|digit
+
+        // same code identifiers and Constants
+        // different codes for tokens

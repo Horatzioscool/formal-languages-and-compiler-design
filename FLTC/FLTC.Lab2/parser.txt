@@ -1,0 +1,4 @@
+﻿Team Horatzio
+
+Parser:
+LR(0)

@@ -1,0 +1,2 @@
+[START]program ::= assignment|NIL
+assignment|ab ::= [IDENT],"=",[CONST],"."

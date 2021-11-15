@@ -1,0 +1,39 @@
+program ::= statementList
+statementList ::= statement "." | statement "." statementList
+sequentialStatement ::= statement | statement "," sequentialStatement
+statement ::= declarationStatement | conditionalStatement | loopStatement | expressionStatement
+
+comment ::= "(" {.} ")"
+
+declarationStatement ::= simpleDeclaration | simpleDeclaration "," "known" "as" ":" constValue
+
+simpleDeclaration ::= "thus" identifier "is" type
+type ::= "numeric" | "text" | "complex"
+
+constValue ::= (const|complexNotation)
+complexNotation ::= complexFieldNotation | complexFieldNotation ";" {complexNotation}
+complexFieldNotation ::= "'" identifier "'" "as" constValue
+
+conditionalStatement ::= singleBranchConditionalStatement | multiBranchConditionalStatement
+condition ::= "When" booleanExpression
+singleBranchConditionalStatement ::= condition "," "then" sequentialStatement (";"|".")
+multiBranchConditionalStatement ::= condition "," "then" sequentialStatement "," "when" "not" sequentialStatement (";"|".")
+
+loopStatement ::= whileLoopStatement
+whileLoopStatement ::= "While" booleanExpression "," sequentialStatement ";"|"."
+
+expressionStatement ::= expression
+
+expression ::= assignmentExpression | arithmeticExpression | readExpression | writeExpression | booleanExpression | constValue
+const ::= intconst | characterconst | stringconst
+
+assignmentExpression ::= identifier "shall be" (expression)
+arithmeticExpression ::= term | term arithmeticOperation term
+
+term ::= intconst | identifier | arithmeticExpression 
+arithmeticOperation ::= "added with"|"subtracted by"|"multiply with"|"divide by"
+
+readExpression ::= "read"
+writeExpression ::= expression "shall be written";
+booleanExpression ::= "true" | "false" | expression relation expression
+relation ::= "equals" | "greater than" | "lesser than" | "different to"

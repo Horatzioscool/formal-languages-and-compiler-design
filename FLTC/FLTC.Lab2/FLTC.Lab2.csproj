@@ -12,6 +12,9 @@
     <None Update="program1.in">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="SimpleSyntax.in">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="TokenType\Constant.fa">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

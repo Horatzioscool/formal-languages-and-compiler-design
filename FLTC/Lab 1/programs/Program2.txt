@@ -1,0 +1,11 @@
+(Program that computes the gcd of 2 numbers)
+
+Thus n1 is numeric, thus n2 is numeric.
+
+n1 shall be read, n2 shall be read.
+
+While n1 different to n2, 
+when n1 greater than n2, then n1 shall be n1 subtracted by n2
+when not, n2 shall be n1 subtracted by n2.
+
+n1 shall be written.
