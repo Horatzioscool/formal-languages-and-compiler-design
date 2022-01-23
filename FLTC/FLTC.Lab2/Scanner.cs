@@ -20,6 +20,42 @@ namespace FLTC.Lab2
             this.pif = pif;
         }
 
+        public bool IsIdentifiableToken(string input)
+        {
+            var reservedWord = new ReservedWordTokenType();
+            var delimiter = new DelimiterTokenType();
+            var separator = new SeparatorTokenType();
+            var identifier = new IdentifierTokenType();
+            var constant = new ConstantTokenType();
+
+            if (input.Is(separator))
+            {
+                return true;
+            }
+
+            if (input.Is(delimiter))
+            {
+                return true;
+            }
+
+            if (input.Is(reservedWord))
+            {
+                return true;
+            }
+
+            if (input.Is(identifier))
+            {
+                return true;
+            }
+
+            if (input.Is(constant))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         public void Scan(StreamReader input)
         {
             var reservedWord = new ReservedWordTokenType();
@@ -60,7 +96,7 @@ namespace FLTC.Lab2
                 if (token.Is(constant))
                 {
                     var index = symbolTable.Insert(token);
-                    pif.Add((token, "SYM"));
+                    pif.Add((token, "CNST"));
                     continue;
                 }
 

@@ -14,7 +14,9 @@ namespace FLTC.Lab2
     {
         private static IEnumerable<string> WordsFrom(string text)
         {
-            return text.Replace("\\W", " ").Split(" ").Select(s => s.ToLowerInvariant());
+            return Regex.Replace(text, "\\W", " ")
+                .Split(" ", System.StringSplitOptions.RemoveEmptyEntries)
+                .Select(s => s.ToLower());
         }
 
         public static readonly IEnumerable<string> ReservedWords = Enumerable.Empty<string>()
@@ -27,6 +29,7 @@ namespace FLTC.Lab2
             .Concat(WordsFrom("read, shall be written"))
             .Concat(WordsFrom("true, false"))
             .Concat(WordsFrom("equals, greater than, lesser than, different to"))
+            .Concat(WordsFrom("STOP"))
             .Concat(new[] { "read", "written" })
             ;
 

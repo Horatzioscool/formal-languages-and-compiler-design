@@ -1,6 +1,7 @@
 ﻿Thus min is numeric.
-Thus a is numeric, known as: +0.
-Thus test2 is text, known as: "Shakespear".
+STOP.
+Thus a is numeric ; Thus min is text.
+Thus test2 is text, known as: "Shakespear", known as: "Shakespear".
 Thus a is numeric.
 Thus b is numeric.
 Thus c is numeric.

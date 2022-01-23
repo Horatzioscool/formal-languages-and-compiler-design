@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace FLTC.Lab2.Grammar
 {
@@ -22,39 +23,18 @@ namespace FLTC.Lab2.Grammar
             {
                 var split = line.Split(new[] { "::=" }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim());
 
-                var right = split.ElementAt(0);
-
-                var rightNodes = right.Split("|", StringSplitOptions.RemoveEmptyEntries)
-                    .Select(s => s.Trim());
-
-                foreach(var node in rightNodes)
-                {
-                    if (node.Contains(Grammar.Node.StartNodePrefix))
-                    {
-                        grammar.AddStarting(node.Replace(Grammar.Node.StartNodePrefix, ""));
-                    }
-                    else if (isTokenOrLexicalRule(node))
-                    {
-                        grammar.AddTerminal(node);
-                    }
-                    else
-                    {
-                        grammar.AddNode(node);
-                    }
-                }
-
-                var left = split.ElementAt(1);
+                var left = split.ElementAt(0);
 
                 var leftNodes = left.Split("|", StringSplitOptions.RemoveEmptyEntries)
-                        .Select(s => s.Trim());
+                    .Select(s => s.Trim());
 
-                foreach (var node in leftNodes)
+                foreach(var node in leftNodes)
                 {
                     if (node.Contains(Grammar.Node.StartNodePrefix))
                     {
                         grammar.AddStarting(node.Replace(Grammar.Node.StartNodePrefix, ""));
                     }
-                    else if (isTokenOrLexicalRule(node) || node == Grammar.Node.EmptyString)
+                    else if (Regex.IsMatch(node, "\\\".+\\\"") && isTokenOrLexicalRule(Regex.Replace(node, "\"", "")))
                     {
                         grammar.AddTerminal(node);
                     }
@@ -66,15 +46,32 @@ namespace FLTC.Lab2.Grammar
 
                 leftNodes = leftNodes.Select(n => n.Contains(Grammar.Node.StartNodePrefix) ? n.Replace(Grammar.Node.StartNodePrefix, "") : n);
 
-                grammar.AddProduction(rightNodes.ToArray(), leftNodes.ToArray());
+                var right = split.ElementAt(1);
+
+                var rightNodes = right.Split("|", StringSplitOptions.RemoveEmptyEntries)
+                        .Select(s => s.Trim());
+
+                foreach (var node in rightNodes)
+                {
+                    var subNodes = node.Split("&", StringSplitOptions.RemoveEmptyEntries)
+                        .Select(s => s.Trim()).ToArray();
+                    foreach(var subNode in subNodes)
+                    {
+                        if ((Regex.IsMatch(subNode, "\\\".+\\\"") && isTokenOrLexicalRule(Regex.Replace(subNode, "\"", ""))) || subNode == Grammar.Node.EmptyString || subNode == "[SYM]" || subNode == "[CNST]")
+                        {
+                            grammar.AddTerminal(subNode);
+                        }
+                        else
+                        {
+                            grammar.AddNode(subNode);
+                        }
+                    }
+
+                    grammar.AddProduction(subNodes, leftNodes.ToArray());
+                }
             }
 
             return grammar;
-        }
-
-        internal object ReadGrammar(string v)
-        {
-            throw new NotImplementedException();
         }
     }
 }

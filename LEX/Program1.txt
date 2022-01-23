@@ -1,0 +1,13 @@
+(Program to compute the min of 3 numbers)
+
+Thus min is text, known as -6.
+Thus 0a is numeric.
+Thus b is numeric, known as "abcef".
+Thus c is numeric, known as "".
+a shall be read.
+b shall be read.
+c shall be read.
+min shall be a.
+When b lesser than min, then min shall be b.
+When c lesser than min, then min shall be c.
+min shall be written.

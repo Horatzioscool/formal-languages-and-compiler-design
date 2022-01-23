@@ -1,0 +1,50 @@
+
+%option noyywrap
+%{ 	 
+%} 
+NUMBER 0|(\+|-)?[1-9][0-9]*
+INCORRECT_NUMBER 0[0-9]+
+CHAR [a-zA-Z0-9]
+WORD \"{CHAR}*\"
+CNST {WORD}{1}|{NUMBER}{1}
+
+SYM [a-z][a-z0-9]*
+INCORRECT_SYM {CNST}{SYM}
+
+DECLARATION_KEYWORDS "thus"|"is"|"known"|"as"|"shall"|"be"
+TYPE_KEYWORDS "numeric"|"text"|"complex"
+CONDITIONAL_KEYWORDS "when"|"then"|"when"|"not"
+LOOP_KEYWORDS "while"
+ARITHMETIC_OPERATION_KEYWORDS "added"|"with"|"subtracted"|"by"|"multipliy"|"divide"
+RELATIONAL_OPERATION_KEYWORDS "equals"|"greater"|"than"|"lesser"|"different"|"to"
+BOOLEAN_CNST_KEYWORDS "true"|"false"
+IO_KEYWORDS "read"|"written"
+KEYWORD {DECLARATION_KEYWORDS}{1}|{TYPE_KEYWORDS}{1}|{CONDITIONAL_KEYWORDS}{1}|{LOOP_KEYWORDS}{1}|{ARITHMETIC_OPERATION_KEYWORDS}{1}|{RELATIONAL_OPERATION_KEYWORDS}{1}|{BOOLEAN_CNST_KEYWORDS}{1}|{IO_KEYWORDS}{1}
+DELIMITERS \.|:|;|,
+%% 
+{INCORRECT_NUMBER} printf("Incorrect number detected: %s\n", yytext);
+{CNST} printf( "A constant: %s\n", yytext);
+{KEYWORD} printf("A keyword: %s\n", yytext);
+{INCORRECT_SYM} printf("An Incorrect Identifier: %s\n", yytext);
+{SYM} printf("An identifier: %s\n", yytext);
+{DELIMITERS} printf("A delimiter: %s\n", yytext);
+\(.*\) /* Comments */
+[ \t\r\n]+ /* eat up whitespace */
+. printf("Error, unrecognized char: %s \n", yytext);
+%% 
+main( argc, argv ) 
+int argc; 
+char **argv; 
+{ 
+    ++argv, --argc; /* skip over program name */ 
+    if ( argc > 0 ) {
+        printf("Using file\n");
+        yyin = fopen( argv[0], "r" ); 
+    }
+    else {
+        printf("Using stdin");
+        yyin = stdin; 
+    }
+    yylex(); 
+    return 0;
+} 

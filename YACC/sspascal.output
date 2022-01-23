@@ -1,0 +1,2001 @@
+Grammar
+
+    0 $accept: prog_sursa $end
+
+    1 prog_sursa: PROGRAM ID ';' bloc '.'
+
+    2 bloc: sect_const sect_var instr_comp
+
+    3 sect_const: %empty
+    4           | CONST lista_const
+
+    5 lista_const: decl_const
+    6            | lista_const decl_const
+
+    7 sect_var: %empty
+    8         | VAR lista_var
+
+    9 lista_var: decl_var
+   10          | lista_var decl_var
+
+   11 $@1: %empty
+
+   12 decl_const: ID '=' $@1 expr_stat ';'
+
+   13 decl_var: lista_id ':' tip ';'
+
+   14 lista_id: ID
+   15         | lista_id ',' ID
+
+   16 tip: tip_simplu
+
+   17 tip_simplu: INTEGER
+   18           | REAL
+   19           | CHAR
+
+   20 expr_stat: factor_stat
+   21          | expr_stat '+' expr_stat
+   22          | expr_stat '-' expr_stat
+   23          | expr_stat '*' expr_stat
+   24          | expr_stat '/' expr_stat
+   25          | expr_stat DIV expr_stat
+   26          | expr_stat MOD expr_stat
+
+   27 factor_stat: ID
+   28            | constanta
+   29            | '(' expr_stat ')'
+
+   30 constanta: CONST_INT
+   31          | CONST_REAL
+   32          | CONST_CAR
+
+   33 instr_comp: BEGINN lista_instr END
+
+   34 lista_instr: instr
+   35            | lista_instr ';' instr
+
+   36 instr: %empty
+   37      | instr_atrib
+   38      | instr_if
+   39      | instr_while
+   40      | instr_comp
+   41      | instr_read
+   42      | instr_print
+
+   43 instr_atrib: variabila ATRIB expresie
+
+   44 variabila: ID
+   45          | ID '[' expresie ']'
+   46          | ID '.' ID
+
+   47 expresie: factor
+   48         | expresie '+' expresie
+   49         | expresie '-' expresie
+   50         | expresie '*' expresie
+   51         | expresie '/' expresie
+   52         | expresie DIV expresie
+   53         | expresie MOD expresie
+
+   54 factor: ID
+   55       | constanta
+   56       | ID '(' lista_expr ')'
+   57       | '(' expresie ')'
+   58       | ID '[' expresie ']'
+   59       | ID '.' ID
+
+   60 lista_expr: expresie
+   61           | lista_expr ',' expresie
+
+   62 instr_if: IF conditie THEN instr ramura_else
+
+   63 ramura_else: ELSE instr
+
+   64 conditie: expr_logica
+   65         | expresie op_rel expresie
+
+   66 expr_logica: factor_logic
+   67            | expr_logica AND expr_logica
+   68            | expr_logica OR expr_logica
+
+   69 factor_logic: '(' conditie ')'
+   70             | NOT factor_logic
+
+   71 op_rel: '='
+   72       | '<'
+   73       | '>'
+   74       | NE
+   75       | LE
+   76       | GE
+
+   77 instr_while: WHILE conditie DO instr
+
+   78 instr_print: PRINT '(' lista_elem ')'
+
+   79 lista_elem: element
+   80           | lista_elem ',' element
+
+   81 element: expresie
+   82        | CONST_SIR
+
+   83 instr_read: READ '(' lista_variab ')'
+
+   84 lista_variab: variabila
+   85             | lista_variab ',' variabila
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'(' (40) 29 56 57 69 78 83
+')' (41) 29 56 57 69 78 83
+'*' (42) 23 50
+'+' (43) 21 48
+',' (44) 15 61 80 85
+'-' (45) 22 49
+'.' (46) 1 46 59
+'/' (47) 24 51
+':' (58) 13
+';' (59) 1 12 13 35
+'<' (60) 72
+'=' (61) 12 71
+'>' (62) 73
+'[' (91) 45 58
+']' (93) 45 58
+error (256)
+BEGINN (258) 33
+CONST (259) 4
+DO (260) 77
+ELSE (261) 63
+END (262) 33
+IF (263) 62
+PRINT (264) 78
+PROGRAM (265) 1
+READ (266) 83
+THEN (267) 62
+VAR (268) 8
+WHILE (269) 77
+ID (270) 1 12 14 15 27 44 45 46 54 56 58 59
+CONST_INT (271) 30
+CONST_REAL (272) 31
+CONST_CAR (273) 32
+CONST_SIR (274) 82
+CHAR (275) 19
+INTEGER (276) 17
+REAL (277) 18
+ATRIB (278) 43
+NE (279) 74
+LE (280) 75
+GE (281) 76
+DIV (282) 25 52
+MOD (283) 26 53
+OR (284) 68
+AND (285) 67
+NOT (286) 70
+
+
+Nonterminals, with rules where they appear
+
+$accept (47)
+    on left: 0
+prog_sursa (48)
+    on left: 1, on right: 0
+bloc (49)
+    on left: 2, on right: 1
+sect_const (50)
+    on left: 3 4, on right: 2
+lista_const (51)
+    on left: 5 6, on right: 4 6
+sect_var (52)
+    on left: 7 8, on right: 2
+lista_var (53)
+    on left: 9 10, on right: 8 10
+decl_const (54)
+    on left: 12, on right: 5 6
+$@1 (55)
+    on left: 11, on right: 12
+decl_var (56)
+    on left: 13, on right: 9 10
+lista_id (57)
+    on left: 14 15, on right: 13 15
+tip (58)
+    on left: 16, on right: 13
+tip_simplu (59)
+    on left: 17 18 19, on right: 16
+expr_stat (60)
+    on left: 20 21 22 23 24 25 26, on right: 12 21 22 23 24 25 26 29
+factor_stat (61)
+    on left: 27 28 29, on right: 20
+constanta (62)
+    on left: 30 31 32, on right: 28 55
+instr_comp (63)
+    on left: 33, on right: 2 40
+lista_instr (64)
+    on left: 34 35, on right: 33 35
+instr (65)
+    on left: 36 37 38 39 40 41 42, on right: 34 35 62 63 77
+instr_atrib (66)
+    on left: 43, on right: 37
+variabila (67)
+    on left: 44 45 46, on right: 43 84 85
+expresie (68)
+    on left: 47 48 49 50 51 52 53, on right: 43 45 48 49 50 51 52 53
+    57 58 60 61 65 81
+factor (69)
+    on left: 54 55 56 57 58 59, on right: 47
+lista_expr (70)
+    on left: 60 61, on right: 56 61
+instr_if (71)
+    on left: 62, on right: 38
+ramura_else (72)
+    on left: 63, on right: 62
+conditie (73)
+    on left: 64 65, on right: 62 69 77
+expr_logica (74)
+    on left: 66 67 68, on right: 64 67 68
+factor_logic (75)
+    on left: 69 70, on right: 66 70
+op_rel (76)
+    on left: 71 72 73 74 75 76, on right: 65
+instr_while (77)
+    on left: 77, on right: 39
+instr_print (78)
+    on left: 78, on right: 42
+lista_elem (79)
+    on left: 79 80, on right: 78 80
+element (80)
+    on left: 81 82, on right: 79 80
+instr_read (81)
+    on left: 83, on right: 41
+lista_variab (82)
+    on left: 84 85, on right: 83 85
+
+
+State 0
+
+    0 $accept: . prog_sursa $end
+
+    PROGRAM  shift, and go to state 1
+
+    prog_sursa  go to state 2
+
+
+State 1
+
+    1 prog_sursa: PROGRAM . ID ';' bloc '.'
+
+    ID  shift, and go to state 3
+
+
+State 2
+
+    0 $accept: prog_sursa . $end
+
+    $end  shift, and go to state 4
+
+
+State 3
+
+    1 prog_sursa: PROGRAM ID . ';' bloc '.'
+
+    ';'  shift, and go to state 5
+
+
+State 4
+
+    0 $accept: prog_sursa $end .
+
+    $default  accept
+
+
+State 5
+
+    1 prog_sursa: PROGRAM ID ';' . bloc '.'
+
+    CONST  shift, and go to state 6
+
+    $default  reduce using rule 3 (sect_const)
+
+    bloc        go to state 7
+    sect_const  go to state 8
+
+
+State 6
+
+    4 sect_const: CONST . lista_const
+
+    ID  shift, and go to state 9
+
+    lista_const  go to state 10
+    decl_const   go to state 11
+
+
+State 7
+
+    1 prog_sursa: PROGRAM ID ';' bloc . '.'
+
+    '.'  shift, and go to state 12
+
+
+State 8
+
+    2 bloc: sect_const . sect_var instr_comp
+
+    VAR  shift, and go to state 13
+
+    $default  reduce using rule 7 (sect_var)
+
+    sect_var  go to state 14
+
+
+State 9
+
+   12 decl_const: ID . '=' $@1 expr_stat ';'
+
+    '='  shift, and go to state 15
+
+
+State 10
+
+    4 sect_const: CONST lista_const .
+    6 lista_const: lista_const . decl_const
+
+    ID  shift, and go to state 9
+
+    $default  reduce using rule 4 (sect_const)
+
+    decl_const  go to state 16
+
+
+State 11
+
+    5 lista_const: decl_const .
+
+    $default  reduce using rule 5 (lista_const)
+
+
+State 12
+
+    1 prog_sursa: PROGRAM ID ';' bloc '.' .
+
+    $default  reduce using rule 1 (prog_sursa)
+
+
+State 13
+
+    8 sect_var: VAR . lista_var
+
+    ID  shift, and go to state 17
+
+    lista_var  go to state 18
+    decl_var   go to state 19
+    lista_id   go to state 20
+
+
+State 14
+
+    2 bloc: sect_const sect_var . instr_comp
+
+    BEGINN  shift, and go to state 21
+
+    instr_comp  go to state 22
+
+
+State 15
+
+   12 decl_const: ID '=' . $@1 expr_stat ';'
+
+    $default  reduce using rule 11 ($@1)
+
+    $@1  go to state 23
+
+
+State 16
+
+    6 lista_const: lista_const decl_const .
+
+    $default  reduce using rule 6 (lista_const)
+
+
+State 17
+
+   14 lista_id: ID .
+
+    $default  reduce using rule 14 (lista_id)
+
+
+State 18
+
+    8 sect_var: VAR lista_var .
+   10 lista_var: lista_var . decl_var
+
+    ID  shift, and go to state 17
+
+    $default  reduce using rule 8 (sect_var)
+
+    decl_var  go to state 24
+    lista_id  go to state 20
+
+
+State 19
+
+    9 lista_var: decl_var .
+
+    $default  reduce using rule 9 (lista_var)
+
+
+State 20
+
+   13 decl_var: lista_id . ':' tip ';'
+   15 lista_id: lista_id . ',' ID
+
+    ':'  shift, and go to state 25
+    ','  shift, and go to state 26
+
+
+State 21
+
+   33 instr_comp: BEGINN . lista_instr END
+
+    BEGINN  shift, and go to state 21
+    IF      shift, and go to state 27
+    PRINT   shift, and go to state 28
+    READ    shift, and go to state 29
+    WHILE   shift, and go to state 30
+    ID      shift, and go to state 31
+
+    $default  reduce using rule 36 (instr)
+
+    instr_comp   go to state 32
+    lista_instr  go to state 33
+    instr        go to state 34
+    instr_atrib  go to state 35
+    variabila    go to state 36
+    instr_if     go to state 37
+    instr_while  go to state 38
+    instr_print  go to state 39
+    instr_read   go to state 40
+
+
+State 22
+
+    2 bloc: sect_const sect_var instr_comp .
+
+    $default  reduce using rule 2 (bloc)
+
+
+State 23
+
+   12 decl_const: ID '=' $@1 . expr_stat ';'
+
+    ID          shift, and go to state 41
+    CONST_INT   shift, and go to state 42
+    CONST_REAL  shift, and go to state 43
+    CONST_CAR   shift, and go to state 44
+    '('         shift, and go to state 45
+
+    expr_stat    go to state 46
+    factor_stat  go to state 47
+    constanta    go to state 48
+
+
+State 24
+
+   10 lista_var: lista_var decl_var .
+
+    $default  reduce using rule 10 (lista_var)
+
+
+State 25
+
+   13 decl_var: lista_id ':' . tip ';'
+
+    CHAR     shift, and go to state 49
+    INTEGER  shift, and go to state 50
+    REAL     shift, and go to state 51
+
+    tip         go to state 52
+    tip_simplu  go to state 53
+
+
+State 26
+
+   15 lista_id: lista_id ',' . ID
+
+    ID  shift, and go to state 54
+
+
+State 27
+
+   62 instr_if: IF . conditie THEN instr ramura_else
+
+    ID          shift, and go to state 55
+    CONST_INT   shift, and go to state 42
+    CONST_REAL  shift, and go to state 43
+    CONST_CAR   shift, and go to state 44
+    NOT         shift, and go to state 56
+    '('         shift, and go to state 57
+
+    constanta     go to state 58
+    expresie      go to state 59
+    factor        go to state 60
+    conditie      go to state 61
+    expr_logica   go to state 62
+    factor_logic  go to state 63
+
+
+State 28
+
+   78 instr_print: PRINT . '(' lista_elem ')'
+
+    '('  shift, and go to state 64
+
+
+State 29
+
+   83 instr_read: READ . '(' lista_variab ')'
+
+    '('  shift, and go to state 65
+
+
+State 30
+
+   77 instr_while: WHILE . conditie DO instr
+
+    ID          shift, and go to state 55
+    CONST_INT   shift, and go to state 42
+    CONST_REAL  shift, and go to state 43
+    CONST_CAR   shift, and go to state 44
+    NOT         shift, and go to state 56
+    '('         shift, and go to state 57
+
+    constanta     go to state 58
+    expresie      go to state 59
+    factor        go to state 60
+    conditie      go to state 66
+    expr_logica   go to state 62
+    factor_logic  go to state 63
+
+
+State 31
+
+   44 variabila: ID .
+   45          | ID . '[' expresie ']'
+   46          | ID . '.' ID
+
+    '.'  shift, and go to state 67
+    '['  shift, and go to state 68
+
+    $default  reduce using rule 44 (variabila)
+
+
+State 32
+
+   40 instr: instr_comp .
+
+    $default  reduce using rule 40 (instr)
+
+
+State 33
+
+   33 instr_comp: BEGINN lista_instr . END
+   35 lista_instr: lista_instr . ';' instr
+
+    END  shift, and go to state 69
+    ';'  shift, and go to state 70
+
+
+State 34
+
+   34 lista_instr: instr .
+
+    $default  reduce using rule 34 (lista_instr)
+
+
+State 35
+
+   37 instr: instr_atrib .
+
+    $default  reduce using rule 37 (instr)
+
+
+State 36
+
+   43 instr_atrib: variabila . ATRIB expresie
+
+    ATRIB  shift, and go to state 71
+
+
+State 37
+
+   38 instr: instr_if .
+
+    $default  reduce using rule 38 (instr)
+
+
+State 38
+
+   39 instr: instr_while .
+
+    $default  reduce using rule 39 (instr)
+
+
+State 39
+
+   42 instr: instr_print .
+
+    $default  reduce using rule 42 (instr)
+
+
+State 40
+
+   41 instr: instr_read .
+
+    $default  reduce using rule 41 (instr)
+
+
+State 41
+
+   27 factor_stat: ID .
+
+    $default  reduce using rule 27 (factor_stat)
+
+
+State 42
+
+   30 constanta: CONST_INT .
+
+    $default  reduce using rule 30 (constanta)
+
+
+State 43
+
+   31 constanta: CONST_REAL .
+
+    $default  reduce using rule 31 (constanta)
+
+
+State 44
+
+   32 constanta: CONST_CAR .
+
+    $default  reduce using rule 32 (constanta)
+
+
+State 45
+
+   29 factor_stat: '(' . expr_stat ')'
+
+    ID          shift, and go to state 41
+    CONST_INT   shift, and go to state 42
+    CONST_REAL  shift, and go to state 43
+    CONST_CAR   shift, and go to state 44
+    '('         shift, and go to state 45
+
+    expr_stat    go to state 72
+    factor_stat  go to state 47
+    constanta    go to state 48
+
+
+State 46
+
+   12 decl_const: ID '=' $@1 expr_stat . ';'
+   21 expr_stat: expr_stat . '+' expr_stat
+   22          | expr_stat . '-' expr_stat
+   23          | expr_stat . '*' expr_stat
+   24          | expr_stat . '/' expr_stat
+   25          | expr_stat . DIV expr_stat
+   26          | expr_stat . MOD expr_stat
+
+    '+'  shift, and go to state 73
+    '-'  shift, and go to state 74
+    DIV  shift, and go to state 75
+    MOD  shift, and go to state 76
+    '*'  shift, and go to state 77
+    '/'  shift, and go to state 78
+    ';'  shift, and go to state 79
+
+
+State 47
+
+   20 expr_stat: factor_stat .
+
+    $default  reduce using rule 20 (expr_stat)
+
+
+State 48
+
+   28 factor_stat: constanta .
+
+    $default  reduce using rule 28 (factor_stat)
+
+
+State 49
+
+   19 tip_simplu: CHAR .
+
+    $default  reduce using rule 19 (tip_simplu)
+
+
+State 50
+
+   17 tip_simplu: INTEGER .
+
+    $default  reduce using rule 17 (tip_simplu)
+
+
+State 51
+
+   18 tip_simplu: REAL .
+
+    $default  reduce using rule 18 (tip_simplu)
+
+
+State 52
+
+   13 decl_var: lista_id ':' tip . ';'
+
+    ';'  shift, and go to state 80
+
+
+State 53
+
+   16 tip: tip_simplu .
+
+    $default  reduce using rule 16 (tip)
+
+
+State 54
+
+   15 lista_id: lista_id ',' ID .
+
+    $default  reduce using rule 15 (lista_id)
+
+
+State 55
+
+   54 factor: ID .
+   56       | ID . '(' lista_expr ')'
+   58       | ID . '[' expresie ']'
+   59       | ID . '.' ID
+
+    '.'  shift, and go to state 81
+    '('  shift, and go to state 82
+    '['  shift, and go to state 83
+
+    $default  reduce using rule 54 (factor)
+
+
+State 56
+
+   70 factor_logic: NOT . factor_logic
+
+    NOT  shift, and go to state 56
+    '('  shift, and go to state 84
+
+    factor_logic  go to state 85
+
+
+State 57
+
+   57 factor: '(' . expresie ')'
+   69 factor_logic: '(' . conditie ')'
+
+    ID          shift, and go to state 55
+    CONST_INT   shift, and go to state 42
+    CONST_REAL  shift, and go to state 43
+    CONST_CAR   shift, and go to state 44
+    NOT         shift, and go to state 56
+    '('         shift, and go to state 57
+
+    constanta     go to state 58
+    expresie      go to state 86
+    factor        go to state 60
+    conditie      go to state 87
+    expr_logica   go to state 62
+    factor_logic  go to state 63
+
+
+State 58
+
+   55 factor: constanta .
+
+    $default  reduce using rule 55 (factor)
+
+
+State 59
+
+   48 expresie: expresie . '+' expresie
+   49         | expresie . '-' expresie
+   50         | expresie . '*' expresie
+   51         | expresie . '/' expresie
+   52         | expresie . DIV expresie
+   53         | expresie . MOD expresie
+   65 conditie: expresie . op_rel expresie
+
+    NE   shift, and go to state 88
+    LE   shift, and go to state 89
+    GE   shift, and go to state 90
+    '+'  shift, and go to state 91
+    '-'  shift, and go to state 92
+    DIV  shift, and go to state 93
+    MOD  shift, and go to state 94
+    '*'  shift, and go to state 95
+    '/'  shift, and go to state 96
+    '='  shift, and go to state 97
+    '<'  shift, and go to state 98
+    '>'  shift, and go to state 99
+
+    op_rel  go to state 100
+
+
+State 60
+
+   47 expresie: factor .
+
+    $default  reduce using rule 47 (expresie)
+
+
+State 61
+
+   62 instr_if: IF conditie . THEN instr ramura_else
+
+    THEN  shift, and go to state 101
+
+
+State 62
+
+   64 conditie: expr_logica .
+   67 expr_logica: expr_logica . AND expr_logica
+   68            | expr_logica . OR expr_logica
+
+    OR   shift, and go to state 102
+    AND  shift, and go to state 103
+
+    $default  reduce using rule 64 (conditie)
+
+
+State 63
+
+   66 expr_logica: factor_logic .
+
+    $default  reduce using rule 66 (expr_logica)
+
+
+State 64
+
+   78 instr_print: PRINT '(' . lista_elem ')'
+
+    ID          shift, and go to state 55
+    CONST_INT   shift, and go to state 42
+    CONST_REAL  shift, and go to state 43
+    CONST_CAR   shift, and go to state 44
+    CONST_SIR   shift, and go to state 104
+    '('         shift, and go to state 105
+
+    constanta   go to state 58
+    expresie    go to state 106
+    factor      go to state 60
+    lista_elem  go to state 107
+    element     go to state 108
+
+
+State 65
+
+   83 instr_read: READ '(' . lista_variab ')'
+
+    ID  shift, and go to state 31
+
+    variabila     go to state 109
+    lista_variab  go to state 110
+
+
+State 66
+
+   77 instr_while: WHILE conditie . DO instr
+
+    DO  shift, and go to state 111
+
+
+State 67
+
+   46 variabila: ID '.' . ID
+
+    ID  shift, and go to state 112
+
+
+State 68
+
+   45 variabila: ID '[' . expresie ']'
+
+    ID          shift, and go to state 55
+    CONST_INT   shift, and go to state 42
+    CONST_REAL  shift, and go to state 43
+    CONST_CAR   shift, and go to state 44
+    '('         shift, and go to state 105
+
+    constanta  go to state 58
+    expresie   go to state 113
+    factor     go to state 60
+
+
+State 69
+
+   33 instr_comp: BEGINN lista_instr END .
+
+    $default  reduce using rule 33 (instr_comp)
+
+
+State 70
+
+   35 lista_instr: lista_instr ';' . instr
+
+    BEGINN  shift, and go to state 21
+    IF      shift, and go to state 27
+    PRINT   shift, and go to state 28
+    READ    shift, and go to state 29
+    WHILE   shift, and go to state 30
+    ID      shift, and go to state 31
+
+    $default  reduce using rule 36 (instr)
+
+    instr_comp   go to state 32
+    instr        go to state 114
+    instr_atrib  go to state 35
+    variabila    go to state 36
+    instr_if     go to state 37
+    instr_while  go to state 38
+    instr_print  go to state 39
+    instr_read   go to state 40
+
+
+State 71
+
+   43 instr_atrib: variabila ATRIB . expresie
+
+    ID          shift, and go to state 55
+    CONST_INT   shift, and go to state 42
+    CONST_REAL  shift, and go to state 43
+    CONST_CAR   shift, and go to state 44
+    '('         shift, and go to state 105
+
+    constanta  go to state 58
+    expresie   go to state 115
+    factor     go to state 60
+
+
+State 72
+
+   21 expr_stat: expr_stat . '+' expr_stat
+   22          | expr_stat . '-' expr_stat
+   23          | expr_stat . '*' expr_stat
+   24          | expr_stat . '/' expr_stat
+   25          | expr_stat . DIV expr_stat
+   26          | expr_stat . MOD expr_stat
+   29 factor_stat: '(' expr_stat . ')'
+
+    '+'  shift, and go to state 73
+    '-'  shift, and go to state 74
+    DIV  shift, and go to state 75
+    MOD  shift, and go to state 76
+    '*'  shift, and go to state 77
+    '/'  shift, and go to state 78
+    ')'  shift, and go to state 116
+
+
+State 73
+
+   21 expr_stat: expr_stat '+' . expr_stat
+
+    ID          shift, and go to state 41
+    CONST_INT   shift, and go to state 42
+    CONST_REAL  shift, and go to state 43
+    CONST_CAR   shift, and go to state 44
+    '('         shift, and go to state 45
+
+    expr_stat    go to state 117
+    factor_stat  go to state 47
+    constanta    go to state 48
+
+
+State 74
+
+   22 expr_stat: expr_stat '-' . expr_stat
+
+    ID          shift, and go to state 41
+    CONST_INT   shift, and go to state 42
+    CONST_REAL  shift, and go to state 43
+    CONST_CAR   shift, and go to state 44
+    '('         shift, and go to state 45
+
+    expr_stat    go to state 118
+    factor_stat  go to state 47
+    constanta    go to state 48
+
+
+State 75
+
+   25 expr_stat: expr_stat DIV . expr_stat
+
+    ID          shift, and go to state 41
+    CONST_INT   shift, and go to state 42
+    CONST_REAL  shift, and go to state 43
+    CONST_CAR   shift, and go to state 44
+    '('         shift, and go to state 45
+
+    expr_stat    go to state 119
+    factor_stat  go to state 47
+    constanta    go to state 48
+
+
+State 76
+
+   26 expr_stat: expr_stat MOD . expr_stat
+
+    ID          shift, and go to state 41
+    CONST_INT   shift, and go to state 42
+    CONST_REAL  shift, and go to state 43
+    CONST_CAR   shift, and go to state 44
+    '('         shift, and go to state 45
+
+    expr_stat    go to state 120
+    factor_stat  go to state 47
+    constanta    go to state 48
+
+
+State 77
+
+   23 expr_stat: expr_stat '*' . expr_stat
+
+    ID          shift, and go to state 41
+    CONST_INT   shift, and go to state 42
+    CONST_REAL  shift, and go to state 43
+    CONST_CAR   shift, and go to state 44
+    '('         shift, and go to state 45
+
+    expr_stat    go to state 121
+    factor_stat  go to state 47
+    constanta    go to state 48
+
+
+State 78
+
+   24 expr_stat: expr_stat '/' . expr_stat
+
+    ID          shift, and go to state 41
+    CONST_INT   shift, and go to state 42
+    CONST_REAL  shift, and go to state 43
+    CONST_CAR   shift, and go to state 44
+    '('         shift, and go to state 45
+
+    expr_stat    go to state 122
+    factor_stat  go to state 47
+    constanta    go to state 48
+
+
+State 79
+
+   12 decl_const: ID '=' $@1 expr_stat ';' .
+
+    $default  reduce using rule 12 (decl_const)
+
+
+State 80
+
+   13 decl_var: lista_id ':' tip ';' .
+
+    $default  reduce using rule 13 (decl_var)
+
+
+State 81
+
+   59 factor: ID '.' . ID
+
+    ID  shift, and go to state 123
+
+
+State 82
+
+   56 factor: ID '(' . lista_expr ')'
+
+    ID          shift, and go to state 55
+    CONST_INT   shift, and go to state 42
+    CONST_REAL  shift, and go to state 43
+    CONST_CAR   shift, and go to state 44
+    '('         shift, and go to state 105
+
+    constanta   go to state 58
+    expresie    go to state 124
+    factor      go to state 60
+    lista_expr  go to state 125
+
+
+State 83
+
+   58 factor: ID '[' . expresie ']'
+
+    ID          shift, and go to state 55
+    CONST_INT   shift, and go to state 42
+    CONST_REAL  shift, and go to state 43
+    CONST_CAR   shift, and go to state 44
+    '('         shift, and go to state 105
+
+    constanta  go to state 58
+    expresie   go to state 126
+    factor     go to state 60
+
+
+State 84
+
+   69 factor_logic: '(' . conditie ')'
+
+    ID          shift, and go to state 55
+    CONST_INT   shift, and go to state 42
+    CONST_REAL  shift, and go to state 43
+    CONST_CAR   shift, and go to state 44
+    NOT         shift, and go to state 56
+    '('         shift, and go to state 57
+
+    constanta     go to state 58
+    expresie      go to state 59
+    factor        go to state 60
+    conditie      go to state 87
+    expr_logica   go to state 62
+    factor_logic  go to state 63
+
+
+State 85
+
+   70 factor_logic: NOT factor_logic .
+
+    $default  reduce using rule 70 (factor_logic)
+
+
+State 86
+
+   48 expresie: expresie . '+' expresie
+   49         | expresie . '-' expresie
+   50         | expresie . '*' expresie
+   51         | expresie . '/' expresie
+   52         | expresie . DIV expresie
+   53         | expresie . MOD expresie
+   57 factor: '(' expresie . ')'
+   65 conditie: expresie . op_rel expresie
+
+    NE   shift, and go to state 88
+    LE   shift, and go to state 89
+    GE   shift, and go to state 90
+    '+'  shift, and go to state 91
+    '-'  shift, and go to state 92
+    DIV  shift, and go to state 93
+    MOD  shift, and go to state 94
+    '*'  shift, and go to state 95
+    '/'  shift, and go to state 96
+    '='  shift, and go to state 97
+    ')'  shift, and go to state 127
+    '<'  shift, and go to state 98
+    '>'  shift, and go to state 99
+
+    op_rel  go to state 100
+
+
+State 87
+
+   69 factor_logic: '(' conditie . ')'
+
+    ')'  shift, and go to state 128
+
+
+State 88
+
+   74 op_rel: NE .
+
+    $default  reduce using rule 74 (op_rel)
+
+
+State 89
+
+   75 op_rel: LE .
+
+    $default  reduce using rule 75 (op_rel)
+
+
+State 90
+
+   76 op_rel: GE .
+
+    $default  reduce using rule 76 (op_rel)
+
+
+State 91
+
+   48 expresie: expresie '+' . expresie
+
+    ID          shift, and go to state 55
+    CONST_INT   shift, and go to state 42
+    CONST_REAL  shift, and go to state 43
+    CONST_CAR   shift, and go to state 44
+    '('         shift, and go to state 105
+
+    constanta  go to state 58
+    expresie   go to state 129
+    factor     go to state 60
+
+
+State 92
+
+   49 expresie: expresie '-' . expresie
+
+    ID          shift, and go to state 55
+    CONST_INT   shift, and go to state 42
+    CONST_REAL  shift, and go to state 43
+    CONST_CAR   shift, and go to state 44
+    '('         shift, and go to state 105
+
+    constanta  go to state 58
+    expresie   go to state 130
+    factor     go to state 60
+
+
+State 93
+
+   52 expresie: expresie DIV . expresie
+
+    ID          shift, and go to state 55
+    CONST_INT   shift, and go to state 42
+    CONST_REAL  shift, and go to state 43
+    CONST_CAR   shift, and go to state 44
+    '('         shift, and go to state 105
+
+    constanta  go to state 58
+    expresie   go to state 131
+    factor     go to state 60
+
+
+State 94
+
+   53 expresie: expresie MOD . expresie
+
+    ID          shift, and go to state 55
+    CONST_INT   shift, and go to state 42
+    CONST_REAL  shift, and go to state 43
+    CONST_CAR   shift, and go to state 44
+    '('         shift, and go to state 105
+
+    constanta  go to state 58
+    expresie   go to state 132
+    factor     go to state 60
+
+
+State 95
+
+   50 expresie: expresie '*' . expresie
+
+    ID          shift, and go to state 55
+    CONST_INT   shift, and go to state 42
+    CONST_REAL  shift, and go to state 43
+    CONST_CAR   shift, and go to state 44
+    '('         shift, and go to state 105
+
+    constanta  go to state 58
+    expresie   go to state 133
+    factor     go to state 60
+
+
+State 96
+
+   51 expresie: expresie '/' . expresie
+
+    ID          shift, and go to state 55
+    CONST_INT   shift, and go to state 42
+    CONST_REAL  shift, and go to state 43
+    CONST_CAR   shift, and go to state 44
+    '('         shift, and go to state 105
+
+    constanta  go to state 58
+    expresie   go to state 134
+    factor     go to state 60
+
+
+State 97
+
+   71 op_rel: '=' .
+
+    $default  reduce using rule 71 (op_rel)
+
+
+State 98
+
+   72 op_rel: '<' .
+
+    $default  reduce using rule 72 (op_rel)
+
+
+State 99
+
+   73 op_rel: '>' .
+
+    $default  reduce using rule 73 (op_rel)
+
+
+State 100
+
+   65 conditie: expresie op_rel . expresie
+
+    ID          shift, and go to state 55
+    CONST_INT   shift, and go to state 42
+    CONST_REAL  shift, and go to state 43
+    CONST_CAR   shift, and go to state 44
+    '('         shift, and go to state 105
+
+    constanta  go to state 58
+    expresie   go to state 135
+    factor     go to state 60
+
+
+State 101
+
+   62 instr_if: IF conditie THEN . instr ramura_else
+
+    BEGINN  shift, and go to state 21
+    IF      shift, and go to state 27
+    PRINT   shift, and go to state 28
+    READ    shift, and go to state 29
+    WHILE   shift, and go to state 30
+    ID      shift, and go to state 31
+
+    $default  reduce using rule 36 (instr)
+
+    instr_comp   go to state 32
+    instr        go to state 136
+    instr_atrib  go to state 35
+    variabila    go to state 36
+    instr_if     go to state 37
+    instr_while  go to state 38
+    instr_print  go to state 39
+    instr_read   go to state 40
+
+
+State 102
+
+   68 expr_logica: expr_logica OR . expr_logica
+
+    NOT  shift, and go to state 56
+    '('  shift, and go to state 84
+
+    expr_logica   go to state 137
+    factor_logic  go to state 63
+
+
+State 103
+
+   67 expr_logica: expr_logica AND . expr_logica
+
+    NOT  shift, and go to state 56
+    '('  shift, and go to state 84
+
+    expr_logica   go to state 138
+    factor_logic  go to state 63
+
+
+State 104
+
+   82 element: CONST_SIR .
+
+    $default  reduce using rule 82 (element)
+
+
+State 105
+
+   57 factor: '(' . expresie ')'
+
+    ID          shift, and go to state 55
+    CONST_INT   shift, and go to state 42
+    CONST_REAL  shift, and go to state 43
+    CONST_CAR   shift, and go to state 44
+    '('         shift, and go to state 105
+
+    constanta  go to state 58
+    expresie   go to state 139
+    factor     go to state 60
+
+
+State 106
+
+   48 expresie: expresie . '+' expresie
+   49         | expresie . '-' expresie
+   50         | expresie . '*' expresie
+   51         | expresie . '/' expresie
+   52         | expresie . DIV expresie
+   53         | expresie . MOD expresie
+   81 element: expresie .
+
+    '+'  shift, and go to state 91
+    '-'  shift, and go to state 92
+    DIV  shift, and go to state 93
+    MOD  shift, and go to state 94
+    '*'  shift, and go to state 95
+    '/'  shift, and go to state 96
+
+    $default  reduce using rule 81 (element)
+
+
+State 107
+
+   78 instr_print: PRINT '(' lista_elem . ')'
+   80 lista_elem: lista_elem . ',' element
+
+    ','  shift, and go to state 140
+    ')'  shift, and go to state 141
+
+
+State 108
+
+   79 lista_elem: element .
+
+    $default  reduce using rule 79 (lista_elem)
+
+
+State 109
+
+   84 lista_variab: variabila .
+
+    $default  reduce using rule 84 (lista_variab)
+
+
+State 110
+
+   83 instr_read: READ '(' lista_variab . ')'
+   85 lista_variab: lista_variab . ',' variabila
+
+    ','  shift, and go to state 142
+    ')'  shift, and go to state 143
+
+
+State 111
+
+   77 instr_while: WHILE conditie DO . instr
+
+    BEGINN  shift, and go to state 21
+    IF      shift, and go to state 27
+    PRINT   shift, and go to state 28
+    READ    shift, and go to state 29
+    WHILE   shift, and go to state 30
+    ID      shift, and go to state 31
+
+    $default  reduce using rule 36 (instr)
+
+    instr_comp   go to state 32
+    instr        go to state 144
+    instr_atrib  go to state 35
+    variabila    go to state 36
+    instr_if     go to state 37
+    instr_while  go to state 38
+    instr_print  go to state 39
+    instr_read   go to state 40
+
+
+State 112
+
+   46 variabila: ID '.' ID .
+
+    $default  reduce using rule 46 (variabila)
+
+
+State 113
+
+   45 variabila: ID '[' expresie . ']'
+   48 expresie: expresie . '+' expresie
+   49         | expresie . '-' expresie
+   50         | expresie . '*' expresie
+   51         | expresie . '/' expresie
+   52         | expresie . DIV expresie
+   53         | expresie . MOD expresie
+
+    '+'  shift, and go to state 91
+    '-'  shift, and go to state 92
+    DIV  shift, and go to state 93
+    MOD  shift, and go to state 94
+    '*'  shift, and go to state 95
+    '/'  shift, and go to state 96
+    ']'  shift, and go to state 145
+
+
+State 114
+
+   35 lista_instr: lista_instr ';' instr .
+
+    $default  reduce using rule 35 (lista_instr)
+
+
+State 115
+
+   43 instr_atrib: variabila ATRIB expresie .
+   48 expresie: expresie . '+' expresie
+   49         | expresie . '-' expresie
+   50         | expresie . '*' expresie
+   51         | expresie . '/' expresie
+   52         | expresie . DIV expresie
+   53         | expresie . MOD expresie
+
+    '+'  shift, and go to state 91
+    '-'  shift, and go to state 92
+    DIV  shift, and go to state 93
+    MOD  shift, and go to state 94
+    '*'  shift, and go to state 95
+    '/'  shift, and go to state 96
+
+    $default  reduce using rule 43 (instr_atrib)
+
+
+State 116
+
+   29 factor_stat: '(' expr_stat ')' .
+
+    $default  reduce using rule 29 (factor_stat)
+
+
+State 117
+
+   21 expr_stat: expr_stat . '+' expr_stat
+   21          | expr_stat '+' expr_stat .
+   22          | expr_stat . '-' expr_stat
+   23          | expr_stat . '*' expr_stat
+   24          | expr_stat . '/' expr_stat
+   25          | expr_stat . DIV expr_stat
+   26          | expr_stat . MOD expr_stat
+
+    DIV  shift, and go to state 75
+    MOD  shift, and go to state 76
+    '*'  shift, and go to state 77
+    '/'  shift, and go to state 78
+
+    $default  reduce using rule 21 (expr_stat)
+
+
+State 118
+
+   21 expr_stat: expr_stat . '+' expr_stat
+   22          | expr_stat . '-' expr_stat
+   22          | expr_stat '-' expr_stat .
+   23          | expr_stat . '*' expr_stat
+   24          | expr_stat . '/' expr_stat
+   25          | expr_stat . DIV expr_stat
+   26          | expr_stat . MOD expr_stat
+
+    DIV  shift, and go to state 75
+    MOD  shift, and go to state 76
+    '*'  shift, and go to state 77
+    '/'  shift, and go to state 78
+
+    $default  reduce using rule 22 (expr_stat)
+
+
+State 119
+
+   21 expr_stat: expr_stat . '+' expr_stat
+   22          | expr_stat . '-' expr_stat
+   23          | expr_stat . '*' expr_stat
+   24          | expr_stat . '/' expr_stat
+   25          | expr_stat . DIV expr_stat
+   25          | expr_stat DIV expr_stat .
+   26          | expr_stat . MOD expr_stat
+
+    $default  reduce using rule 25 (expr_stat)
+
+
+State 120
+
+   21 expr_stat: expr_stat . '+' expr_stat
+   22          | expr_stat . '-' expr_stat
+   23          | expr_stat . '*' expr_stat
+   24          | expr_stat . '/' expr_stat
+   25          | expr_stat . DIV expr_stat
+   26          | expr_stat . MOD expr_stat
+   26          | expr_stat MOD expr_stat .
+
+    $default  reduce using rule 26 (expr_stat)
+
+
+State 121
+
+   21 expr_stat: expr_stat . '+' expr_stat
+   22          | expr_stat . '-' expr_stat
+   23          | expr_stat . '*' expr_stat
+   23          | expr_stat '*' expr_stat .
+   24          | expr_stat . '/' expr_stat
+   25          | expr_stat . DIV expr_stat
+   26          | expr_stat . MOD expr_stat
+
+    $default  reduce using rule 23 (expr_stat)
+
+
+State 122
+
+   21 expr_stat: expr_stat . '+' expr_stat
+   22          | expr_stat . '-' expr_stat
+   23          | expr_stat . '*' expr_stat
+   24          | expr_stat . '/' expr_stat
+   24          | expr_stat '/' expr_stat .
+   25          | expr_stat . DIV expr_stat
+   26          | expr_stat . MOD expr_stat
+
+    $default  reduce using rule 24 (expr_stat)
+
+
+State 123
+
+   59 factor: ID '.' ID .
+
+    $default  reduce using rule 59 (factor)
+
+
+State 124
+
+   48 expresie: expresie . '+' expresie
+   49         | expresie . '-' expresie
+   50         | expresie . '*' expresie
+   51         | expresie . '/' expresie
+   52         | expresie . DIV expresie
+   53         | expresie . MOD expresie
+   60 lista_expr: expresie .
+
+    '+'  shift, and go to state 91
+    '-'  shift, and go to state 92
+    DIV  shift, and go to state 93
+    MOD  shift, and go to state 94
+    '*'  shift, and go to state 95
+    '/'  shift, and go to state 96
+
+    $default  reduce using rule 60 (lista_expr)
+
+
+State 125
+
+   56 factor: ID '(' lista_expr . ')'
+   61 lista_expr: lista_expr . ',' expresie
+
+    ','  shift, and go to state 146
+    ')'  shift, and go to state 147
+
+
+State 126
+
+   48 expresie: expresie . '+' expresie
+   49         | expresie . '-' expresie
+   50         | expresie . '*' expresie
+   51         | expresie . '/' expresie
+   52         | expresie . DIV expresie
+   53         | expresie . MOD expresie
+   58 factor: ID '[' expresie . ']'
+
+    '+'  shift, and go to state 91
+    '-'  shift, and go to state 92
+    DIV  shift, and go to state 93
+    MOD  shift, and go to state 94
+    '*'  shift, and go to state 95
+    '/'  shift, and go to state 96
+    ']'  shift, and go to state 148
+
+
+State 127
+
+   57 factor: '(' expresie ')' .
+
+    $default  reduce using rule 57 (factor)
+
+
+State 128
+
+   69 factor_logic: '(' conditie ')' .
+
+    $default  reduce using rule 69 (factor_logic)
+
+
+State 129
+
+   48 expresie: expresie . '+' expresie
+   48         | expresie '+' expresie .
+   49         | expresie . '-' expresie
+   50         | expresie . '*' expresie
+   51         | expresie . '/' expresie
+   52         | expresie . DIV expresie
+   53         | expresie . MOD expresie
+
+    DIV  shift, and go to state 93
+    MOD  shift, and go to state 94
+    '*'  shift, and go to state 95
+    '/'  shift, and go to state 96
+
+    $default  reduce using rule 48 (expresie)
+
+
+State 130
+
+   48 expresie: expresie . '+' expresie
+   49         | expresie . '-' expresie
+   49         | expresie '-' expresie .
+   50         | expresie . '*' expresie
+   51         | expresie . '/' expresie
+   52         | expresie . DIV expresie
+   53         | expresie . MOD expresie
+
+    DIV  shift, and go to state 93
+    MOD  shift, and go to state 94
+    '*'  shift, and go to state 95
+    '/'  shift, and go to state 96
+
+    $default  reduce using rule 49 (expresie)
+
+
+State 131
+
+   48 expresie: expresie . '+' expresie
+   49         | expresie . '-' expresie
+   50         | expresie . '*' expresie
+   51         | expresie . '/' expresie
+   52         | expresie . DIV expresie
+   52         | expresie DIV expresie .
+   53         | expresie . MOD expresie
+
+    $default  reduce using rule 52 (expresie)
+
+
+State 132
+
+   48 expresie: expresie . '+' expresie
+   49         | expresie . '-' expresie
+   50         | expresie . '*' expresie
+   51         | expresie . '/' expresie
+   52         | expresie . DIV expresie
+   53         | expresie . MOD expresie
+   53         | expresie MOD expresie .
+
+    $default  reduce using rule 53 (expresie)
+
+
+State 133
+
+   48 expresie: expresie . '+' expresie
+   49         | expresie . '-' expresie
+   50         | expresie . '*' expresie
+   50         | expresie '*' expresie .
+   51         | expresie . '/' expresie
+   52         | expresie . DIV expresie
+   53         | expresie . MOD expresie
+
+    $default  reduce using rule 50 (expresie)
+
+
+State 134
+
+   48 expresie: expresie . '+' expresie
+   49         | expresie . '-' expresie
+   50         | expresie . '*' expresie
+   51         | expresie . '/' expresie
+   51         | expresie '/' expresie .
+   52         | expresie . DIV expresie
+   53         | expresie . MOD expresie
+
+    $default  reduce using rule 51 (expresie)
+
+
+State 135
+
+   48 expresie: expresie . '+' expresie
+   49         | expresie . '-' expresie
+   50         | expresie . '*' expresie
+   51         | expresie . '/' expresie
+   52         | expresie . DIV expresie
+   53         | expresie . MOD expresie
+   65 conditie: expresie op_rel expresie .
+
+    '+'  shift, and go to state 91
+    '-'  shift, and go to state 92
+    DIV  shift, and go to state 93
+    MOD  shift, and go to state 94
+    '*'  shift, and go to state 95
+    '/'  shift, and go to state 96
+
+    $default  reduce using rule 65 (conditie)
+
+
+State 136
+
+   62 instr_if: IF conditie THEN instr . ramura_else
+
+    ELSE  shift, and go to state 149
+
+    ramura_else  go to state 150
+
+
+State 137
+
+   67 expr_logica: expr_logica . AND expr_logica
+   68            | expr_logica . OR expr_logica
+   68            | expr_logica OR expr_logica .
+
+    AND  shift, and go to state 103
+
+    $default  reduce using rule 68 (expr_logica)
+
+
+State 138
+
+   67 expr_logica: expr_logica . AND expr_logica
+   67            | expr_logica AND expr_logica .
+   68            | expr_logica . OR expr_logica
+
+    $default  reduce using rule 67 (expr_logica)
+
+
+State 139
+
+   48 expresie: expresie . '+' expresie
+   49         | expresie . '-' expresie
+   50         | expresie . '*' expresie
+   51         | expresie . '/' expresie
+   52         | expresie . DIV expresie
+   53         | expresie . MOD expresie
+   57 factor: '(' expresie . ')'
+
+    '+'  shift, and go to state 91
+    '-'  shift, and go to state 92
+    DIV  shift, and go to state 93
+    MOD  shift, and go to state 94
+    '*'  shift, and go to state 95
+    '/'  shift, and go to state 96
+    ')'  shift, and go to state 127
+
+
+State 140
+
+   80 lista_elem: lista_elem ',' . element
+
+    ID          shift, and go to state 55
+    CONST_INT   shift, and go to state 42
+    CONST_REAL  shift, and go to state 43
+    CONST_CAR   shift, and go to state 44
+    CONST_SIR   shift, and go to state 104
+    '('         shift, and go to state 105
+
+    constanta  go to state 58
+    expresie   go to state 106
+    factor     go to state 60
+    element    go to state 151
+
+
+State 141
+
+   78 instr_print: PRINT '(' lista_elem ')' .
+
+    $default  reduce using rule 78 (instr_print)
+
+
+State 142
+
+   85 lista_variab: lista_variab ',' . variabila
+
+    ID  shift, and go to state 31
+
+    variabila  go to state 152
+
+
+State 143
+
+   83 instr_read: READ '(' lista_variab ')' .
+
+    $default  reduce using rule 83 (instr_read)
+
+
+State 144
+
+   77 instr_while: WHILE conditie DO instr .
+
+    $default  reduce using rule 77 (instr_while)
+
+
+State 145
+
+   45 variabila: ID '[' expresie ']' .
+
+    $default  reduce using rule 45 (variabila)
+
+
+State 146
+
+   61 lista_expr: lista_expr ',' . expresie
+
+    ID          shift, and go to state 55
+    CONST_INT   shift, and go to state 42
+    CONST_REAL  shift, and go to state 43
+    CONST_CAR   shift, and go to state 44
+    '('         shift, and go to state 105
+
+    constanta  go to state 58
+    expresie   go to state 153
+    factor     go to state 60
+
+
+State 147
+
+   56 factor: ID '(' lista_expr ')' .
+
+    $default  reduce using rule 56 (factor)
+
+
+State 148
+
+   58 factor: ID '[' expresie ']' .
+
+    $default  reduce using rule 58 (factor)
+
+
+State 149
+
+   63 ramura_else: ELSE . instr
+
+    BEGINN  shift, and go to state 21
+    IF      shift, and go to state 27
+    PRINT   shift, and go to state 28
+    READ    shift, and go to state 29
+    WHILE   shift, and go to state 30
+    ID      shift, and go to state 31
+
+    $default  reduce using rule 36 (instr)
+
+    instr_comp   go to state 32
+    instr        go to state 154
+    instr_atrib  go to state 35
+    variabila    go to state 36
+    instr_if     go to state 37
+    instr_while  go to state 38
+    instr_print  go to state 39
+    instr_read   go to state 40
+
+
+State 150
+
+   62 instr_if: IF conditie THEN instr ramura_else .
+
+    $default  reduce using rule 62 (instr_if)
+
+
+State 151
+
+   80 lista_elem: lista_elem ',' element .
+
+    $default  reduce using rule 80 (lista_elem)
+
+
+State 152
+
+   85 lista_variab: lista_variab ',' variabila .
+
+    $default  reduce using rule 85 (lista_variab)
+
+
+State 153
+
+   48 expresie: expresie . '+' expresie
+   49         | expresie . '-' expresie
+   50         | expresie . '*' expresie
+   51         | expresie . '/' expresie
+   52         | expresie . DIV expresie
+   53         | expresie . MOD expresie
+   61 lista_expr: lista_expr ',' expresie .
+
+    '+'  shift, and go to state 91
+    '-'  shift, and go to state 92
+    DIV  shift, and go to state 93
+    MOD  shift, and go to state 94
+    '*'  shift, and go to state 95
+    '/'  shift, and go to state 96
+
+    $default  reduce using rule 61 (lista_expr)
+
+
+State 154
+
+   63 ramura_else: ELSE instr .
+
+    $default  reduce using rule 63 (ramura_else)

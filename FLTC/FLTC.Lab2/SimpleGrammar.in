@@ -1,0 +1,7 @@
+[START]program ::= statementList
+statementList ::= statement & "."|statement & "." & sequentialStatement
+sequentialStatement ::= statement | statement & ";" & sequentialStatement
+statement ::= declarationStatement
+declarationStatement ::= simpleDeclaration
+simpleDeclaration ::= "thus" & [SYM] & "is" & type
+type ::= "numeric"|"text"
